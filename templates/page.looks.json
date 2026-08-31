@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "looks-list-dnd",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

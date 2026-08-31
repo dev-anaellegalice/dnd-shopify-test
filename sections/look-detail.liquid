@@ -1,0 +1,27 @@
+<section class="look-detail">
+  <div class="look-detail__inner">
+
+    <h1>
+      {{ metaobject.title.value }}
+    </h1>
+
+    {% if metaobject.subtitle.value != blank %}
+      <div class="look-detail__subtitle">
+        {{ metaobject.subtitle.value }}
+      </div>
+    {% endif %}
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Looks Detail",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Looks Detail"
+    }
+  ]
+}
+{% endschema %}

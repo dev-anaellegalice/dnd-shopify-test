@@ -1,0 +1,50 @@
+{{ 'looks-list-dnd.css' | asset_url | stylesheet_tag }}
+
+<section class="looks-list">
+  <div class="looks-list__inner">
+
+    <h1 class="looks-list__title">
+      Shop the Look
+    </h1>
+
+    {% assign looks = shop.metaobjects.look_dnd.values %}
+
+    <div class="looks-list__grid">
+      {% for look in looks %}
+        {% assign main_image = look.images.value | first %}
+        <div class="looks-list__item">
+            <a href="{{ look.system.url }}" class="looks-list__item-link">
+                {% if main_image %}
+                    <div class="looks-list__media">
+                        {{ main_image
+                        | image_url: width: 800
+                        | image_tag:
+                            loading: 'lazy',
+                            widths: '400, 600, 800',
+                            alt: look.title.value
+                        }}
+                    </div>
+                {% endif %}
+            </a>
+
+          <h2 class="looks-list__item-title">
+            {{ look.title.value }}
+          </h2>
+        </div>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Looks list",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Looks list"
+    }
+  ]
+}
+{% endschema %}
