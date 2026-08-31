@@ -150,3 +150,26 @@ Responsable de la récupération des variantes sélectionnées et de l’ajout g
 Les sélecteurs sont recherchés à l’intérieur de chaque composant avec `this.querySelector()` / `this.querySelectorAll()` afin de limiter leur portée et d’éviter de dépendre inutilement du DOM global.
 
 Cette organisation permet de séparer les responsabilités et de garder un JavaScript relativement simple, tout en restant cohérent avec l’architecture basée sur les composants du thème Horizon.
+
+## 8. Section Look réutilisable — Bonus
+
+commit : "feat: make Look Detail section reusable across the theme"
+
+La section `look-detail.liquid`, initialement utilisée pour les pages détail des Looks, a été rendue réutilisable depuis le Theme Editor.
+
+Elle peut ainsi être ajoutée sur d’autres pages du store, comme la page d’accueil ou une landing page, sans dupliquer le code de la fonctionnalité.
+
+Lorsque la section est utilisée sur une page de metaobject, le Look courant est automatiquement utilisé.
+
+Dans les autres contextes, un réglage de type `metaobject` permet au marchand de sélectionner directement le Look qu’il souhaite afficher depuis le Theme Editor.
+
+La section conserve l’ensemble des fonctionnalités du Look :
+
+- galerie de visuels ;
+- informations du Look ;
+- liste des produits associés ;
+- sélection des variantes ;
+- ajout individuel au panier ;
+- ajout de l’ensemble du Look au panier.
+
+Cette approche permet de conserver une seule section pour l’affichage détaillé d’un Look, tout en la rendant utilisable dans différents contextes du thème.
