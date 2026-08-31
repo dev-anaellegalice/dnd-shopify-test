@@ -4,123 +4,140 @@
   type="module"
   fetchpriority="low"
 ></script>
-<section class="look-detail">
-  <div class="look-detail__inner">
+{% liquid
+  if metaobject != blank
+    assign look = metaobject
+  else
+    assign look = section.settings.look
+  endif
+%}
 
-    {% assign look_images = metaobject.images.value %}
+{%  if look != blank %}
+    <section class="look-detail">
+    <div class="look-detail__inner">
 
-    <div class="look-detail__layout">
+        {% assign look_images = look.images.value %}
 
-      <div class="look-detail__visual">
+        <div class="look-detail__layout">
 
-        {% if look_images != blank %}
-            <look-gallery class="look-detail__gallery-wrapper">
+        <div class="look-detail__visual">
 
-            <div class="look-detail__gallery" data-gallery>
-                {% for image in look_images %}
-                <div class="look-detail__slide">
-                    {{ image
-                    | image_url: width: 600
-                    | image_tag:
-                        loading: 'lazy',
-                        alt: metaobject.title.value
-                    }}
-                </div>
-                {% endfor %}
-            </div>
+            {% if look_images != blank %}
+                <look-gallery class="look-detail__gallery-wrapper">
 
-            {% if look_images.size > 1 %}
-                <button
-                type="button"
-                class="look-detail__gallery-button look-detail__gallery-button--prev"
-                data-prev
-                aria-label="Voir l’image précédente"
-                >
-                &lt;
-                </button>
-
-                <button
-                type="button"
-                class="look-detail__gallery-button look-detail__gallery-button--next"
-                data-next
-                aria-label="Voir l’image suivante"
-                >
-                &gt;
-                </button>
-            {% endif %}
-
-            </look-gallery>
-        {% endif %}
-
-      </div>
-
-
-      <div class="look-detail__content">
-
-        <h1 class="look-detail__title">
-          {{ metaobject.title.value }}
-        </h1>
-
-        {% if metaobject.subtitle.value != blank %}
-          <div class="look-detail__subtitle">
-            {{ metaobject.subtitle.value }}
-          </div>
-        {% endif %}
-
-        {% assign look_products = metaobject.products.value %}
-
-        {% if look_products != blank %}
-            <look-shop-all>
-                <div class="look-detail__products">
-                    {% for product in look_products %}
-                        <div class="look-detail__product">
-
-                            {% if product.featured_image %}
-                                <div class="look-detail__product-image">
-                                {{ product.featured_image
-                                    | image_url: width: 400
-                                    | image_tag:
-                                    loading: 'lazy',
-                                    alt: product.title
-                                }}
-                                </div>
-                            {% endif %}
-
-                            <div class="look-detail__product-info">
-                                <div class="look-detail__product-header">
-                                    <h2 class="look-detail__product-title">
-                                        {{ product.title }}
-                                    </h2>
-
-                                    <span class="look-detail__product-price">
-                                        {{ product.price | money }}
-                                    </span>
-                                    
-                                    {% render 'look-buy-button', product: product, section_id: section.id %}
-                                </div>
-                            </div>
-                        </div>
+                <div class="look-detail__gallery" data-gallery>
+                    {% for image in look_images %}
+                    <div class="look-detail__slide">
+                        {{ image
+                        | image_url: width: 600
+                        | image_tag:
+                            loading: 'lazy',
+                            alt: look.title.value
+                        }}
+                    </div>
                     {% endfor %}
+                </div>
+
+                {% if look_images.size > 1 %}
+                    <button
+                    type="button"
+                    class="look-detail__gallery-button look-detail__gallery-button--prev"
+                    data-prev
+                    aria-label="Voir l’image précédente"
+                    >
+                    &lt;
+                    </button>
 
                     <button
-                        type="button"
-                        class="look-detail__shop-all"
-                        data-add-all
-                        >
-                        Shop the look
+                    type="button"
+                    class="look-detail__gallery-button look-detail__gallery-button--next"
+                    data-next
+                    aria-label="Voir l’image suivante"
+                    >
+                    &gt;
                     </button>
-                </div>
-            </look-shop-all>
-        {% endif %}
-      </div>
+                {% endif %}
+
+                </look-gallery>
+            {% endif %}
+
+        </div>
+
+
+        <div class="look-detail__content">
+
+            <h1 class="look-detail__title">
+            {{ look.title.value }}
+            </h1>
+
+            {% if look.subtitle.value != blank %}
+            <div class="look-detail__subtitle">
+                {{ look.subtitle.value }}
+            </div>
+            {% endif %}
+
+            {% assign look_products = look.products.value %}
+
+            {% if look_products != blank %}
+                <look-shop-all>
+                    <div class="look-detail__products">
+                        {% for product in look_products %}
+                            <div class="look-detail__product">
+
+                                {% if product.featured_image %}
+                                    <div class="look-detail__product-image">
+                                    {{ product.featured_image
+                                        | image_url: width: 400
+                                        | image_tag:
+                                        loading: 'lazy',
+                                        alt: product.title
+                                    }}
+                                    </div>
+                                {% endif %}
+
+                                <div class="look-detail__product-info">
+                                    <div class="look-detail__product-header">
+                                        <h2 class="look-detail__product-title">
+                                            {{ product.title }}
+                                        </h2>
+
+                                        <span class="look-detail__product-price">
+                                            {{ product.price | money }}
+                                        </span>
+                                        
+                                        {% render 'look-buy-button', product: product, section_id: section.id %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                        <button
+                            type="button"
+                            class="look-detail__shop-all"
+                            data-add-all
+                            >
+                            Shop the look
+                        </button>
+                    </div>
+                </look-shop-all>
+            {% endif %}
+        </div>
+        </div>
     </div>
-  </div>
-</section>
+    </section>
+{% endif %}
 
 {% schema %}
 {
   "name": "Looks Detail",
-  "settings": [],
+  "settings": [
+    {
+      "type": "metaobject",
+      "id": "look",
+      "label": "Look",
+      "metaobject_type": "look_dnd"
+    }
+  ],
   "presets": [
     {
       "name": "Looks Detail"
