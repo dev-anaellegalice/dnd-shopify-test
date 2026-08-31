@@ -1,0 +1,97 @@
+{% liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign product_variant_media = current_variant.featured_media.preview_image | image_url: width: 100
+  assign form_id = 'look-product-form-' | append: section_id | append: '-' | append: product.id
+%}
+
+<product-form-component
+  id="LookProductForm-{{ section_id }}-{{ product.id }}"
+  data-product-id="{{ product.id }}"
+  data-quantity-default="1"
+  on:submit="/handleSubmit"
+>
+  {%- form 'product',
+    product,
+    id: form_id,
+    class: 'look-detail__product-form',
+    novalidate: 'novalidate'
+  -%}
+
+    {% if product.variants.size > 1 %}
+
+      <label
+        for="variant-{{ product.id }}"
+        class="visually-hidden"
+      >
+        Choisir une variante pour {{ product.title }}
+      </label>
+
+      <select
+        id="variant-{{ product.id }}"
+        class="look-detail__variant-select"
+        name="id"
+        ref="variantId"
+      >
+        {% for variant in product.variants %}
+          <option
+            value="{{ variant.id }}"
+            {% if variant.id == current_variant.id %}
+              selected
+            {% endif %}
+            {% unless variant.available %}
+              disabled
+            {% endunless %}
+          >
+            {{ variant.title }}
+            {% unless variant.available %}
+              — Indisponible
+            {% endunless %}
+          </option>
+        {% endfor %}
+      </select>
+
+    {% else %}
+
+      <input
+        ref="variantId"
+        type="hidden"
+        name="id"
+        value="{{ current_variant.id }}"
+      >
+
+    {% endif %}
+
+    <add-to-cart-component
+      class="look-detail__add-to-cart"
+      ref="addToCartButtonContainer"
+      data-product-variant-media="{{ product_variant_media }}"
+      data-add-to-cart-animation="{{ settings.add_to_cart_animation }}"
+    >
+      <button
+        type="submit"
+        name="add"
+        ref="addToCartButton"
+        on:click="/handleClick"
+        class="look-detail__product-button"
+        {% unless current_variant.available %}
+          disabled
+        {% endunless %}
+        aria-label="Ajouter {{ product.title }} au panier"
+      >
+        <span aria-hidden="true">+</span>
+      </button>
+    </add-to-cart-component>
+
+    <div
+      ref="addToCartTextError"
+      class="look-detail__product-error hidden"
+    ></div>
+
+    <div
+      ref="liveRegion"
+      class="visually-hidden"
+      aria-live="polite"
+    ></div>
+
+  {% endform %}
+</product-form-component>
